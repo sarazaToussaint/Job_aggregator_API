@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+
+# VS Code settings
+.vscode/
+
+# Byte-compiled / logs
+*.log
+*.sqlite3
+
+# Docker stuff
+*.pid
+*.sock
+
+# OS junk
+.DS_Store
+Thumbs.db
