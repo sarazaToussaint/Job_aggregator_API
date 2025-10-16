@@ -1,3 +1,5 @@
+# app/schemas.py
+
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List, Dict
 from datetime import datetime
@@ -10,13 +12,11 @@ class JobBase(BaseModel):
     url: str
 
 
-# Schema for creating a job
 class JobCreate(JobBase):
     pass
 
 
-# Schema for reading a job (includes ID)
-class Job(JobBase):
+class JobRead(JobBase):
     id: int
 
     class Config:
@@ -34,7 +34,7 @@ class SubscriberCreate(SubscriberBase):
     pass
 
 
-class Subscriber(SubscriberBase):
+class SubscriberRead(SubscriberBase):
     id: int
     verified: bool
     plan: str
