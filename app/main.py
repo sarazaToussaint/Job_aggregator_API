@@ -1,37 +1,20 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-from app.db import get_db
-from app import models, schemas, crud
+from fastapi import FastAPI
+from app.db import Base, engine
+from app.routers import jobs, subscribers
 
 app = FastAPI(title="Job Aggregator API")
 
+# Include routers
+app.include_router(jobs.router)
+app.include_router(subscribers.router)
 
-# ✅ Root route (for testing)
+
 @app.get("/")
-def root():
-    return {"message": "Welcome to the Job Aggregator API"}
+def read_root():
+    return {"message": "Welcome to Job Aggregator API! Visit /docs for API docs."}
 
 
-# ✅ Get all jobs
-@app.get("/jobs")
-def get_jobs(db: Session = Depends(get_db)):
-    jobs = crud.get_jobs(db)
-    return jobs
-
-
-# ✅ Create a new job
-@app.post("/jobs")
-def create_job(job: schemas.JobCreate, db: Session = Depends(get_db)):
-    return crud.create_job(db, job)
-
-
-# ✅ Get all suscribers
-@app.get("/subscribers", response_model=list[schemas.Subscriber])
-def read_subscribers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_subscribers(db, skip=skip, limit=limit)
-
-
-# ✅ Create a new subscriber
-@app.post("/subscribers", response_model=schemas.Subscriber)
-def create_subscriber(subscriber: schemas.SubscriberCreate, db: Session = Depends(get_db)):
-    return crud.create_subscriber(db=db, subscriber=subscriber)
+@app.on_event("startup")
+def startup():
+    # Create tables at startup (non-blocking during import)
+    Base.metadata.create_all(bind=engine)
