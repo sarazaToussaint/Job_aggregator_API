@@ -42,3 +42,19 @@ class SubscriberRead(SubscriberBase):
 
     class Config:
         from_attributes = True
+
+
+class JobUpdate(BaseModel):
+    """Fields to update an existing job. All optional."""
+    title: Optional[str] = None
+    company: Optional[str] = None
+    location: Optional[str] = None
+    url: Optional[str] = None
+    # Add other fields as desired for editing (e.g., description, tags, etc.)
+
+
+class SubscriberUpdate(BaseModel):
+    """Fields to update an existing subscriber. All optional."""
+    email: Optional[EmailStr] = None
+    filters: Optional[Dict] = None
+    # Add other fields as desired (e.g., plan, verified)
