@@ -27,4 +27,4 @@ def delete_job(job_id: int, db: Session = Depends(get_db)):
     result = crud.jobs.delete_job(db, job_id)
     if not result:
         raise HTTPException(status_code=404, detail="Job not found")
-    return {"message": "Job deleted successfully"}        
+    return {"message": "Job deleted successfully"}       
