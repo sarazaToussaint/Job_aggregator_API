@@ -14,7 +14,7 @@ class RemoteOKScraper:
         response.raise_for_status()
         jobs = response.json()
         # Filter jobs from last 15 days (timezone-aware)
-        date_cutoff = datetime.now(UTC) - timedelta(days=2)
+        date_cutoff = datetime.now(UTC) - timedelta(days=15)
         filtered_jobs = []
         for job in jobs[1:]:  # skip metadata
             job_date_str = job.get("date")
@@ -26,7 +26,7 @@ class RemoteOKScraper:
                     continue
                 if job_date >= date_cutoff:
                     filtered_jobs.append(job)
-        print(f"Found {len(filtered_jobs)} jobs from last 2 days")
+        print(f"Found {len(filtered_jobs)} jobs from last 15 days")
         for job in filtered_jobs:
             print(job.get("position", "No title"))
 
