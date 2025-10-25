@@ -13,8 +13,8 @@ class RemoteOKScraper:
         response = requests.get(self.API_URL, headers=headers)
         response.raise_for_status()
         jobs = response.json()
-        # Filter jobs from last 15 days (timezone-aware)
-        date_cutoff = datetime.now(UTC) - timedelta(days=15)
+        # Filter jobs from last 7 days (timezone-aware)
+        date_cutoff = datetime.now(UTC) - timedelta(days=2)
         filtered_jobs = []
         for job in jobs[1:]:  # skip metadata
             job_date_str = job.get("date")
@@ -26,9 +26,30 @@ class RemoteOKScraper:
                     continue
                 if job_date >= date_cutoff:
                     filtered_jobs.append(job)
-        print(f"Found {len(filtered_jobs)} jobs from last 15 days")
+        print(f"Found {len(filtered_jobs)} jobs from last 2 days\n")
         for job in filtered_jobs:
-            print(job.get("position", "No title"))
+            title = job.get("position", "No title")
+            company = job.get("company", "Unknown")
+            location = job.get("location", "Unknown")
+            url = job.get("url", "-")
+            description = job.get("description", "-")
+            posted_date = job.get("date", "-")
+            tags = job.get("tags", [])
+            is_remote = "remote" in (location or "").lower() or "remote" in [
+                t.lower() for t in tags]
+            source = "remoteok"
+
+            print(f"Title: {title}")
+            print(f"Company: {company}")
+            print(f"Location: {location}")
+            print(f"URL: {url}")
+            print(
+                f"Description: {description[:200]}{'...' if len(description) > 200 else ''}")
+            print(f"Posted: {posted_date}")
+            print(f"Tags: {', '.join(tags)}")
+            print(f"Source: {source}")
+            print(f"Is Remote: {is_remote}")
+            print("-"*40)
 
 
 if __name__ == "__main__":
