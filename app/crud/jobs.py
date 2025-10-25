@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app import models, schemas
 
 
-def get_jobs(db: Session):
+def get_jobs(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Job).all()
 
 
