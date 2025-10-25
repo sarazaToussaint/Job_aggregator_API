@@ -8,6 +8,11 @@ class JobBase(BaseModel):
     company: str
     location: Optional[str] = None
     url: str
+    description: Optional[str] = None
+    posted_date: Optional[datetime] = None
+    source: Optional[str] = None
+    tags: Optional[list[str]] = None
+    is_remote: Optional[bool] = None
 
 
 class JobCreate(JobBase):
