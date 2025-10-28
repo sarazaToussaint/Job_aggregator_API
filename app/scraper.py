@@ -61,21 +61,24 @@ class RemoteOKScraper:
             print(f"Is Remote: {is_remote}")
             print("-"*40)
 
-            if persist and url not in existing_urls:
-                job_create = schemas.JobCreate(
-                    title=title,
-                    company=company,
-                    location=location,
-                    url=url,
-                    description=description,
-                    posted_date=posted_date,
-                    source=source,
-                    tags=tags,
-                    is_remote=is_remote
-                )
-                crud.jobs.create_job(db, job_create)
-                print(f"Saved job to DB: {title}")
-                existing_urls.add(url)
+            if persist:
+                existing_job = crud.jobs.get_job_by_url(db, url)
+                if existing_job:
+                    print(f"Job already exists, skipping: {title}")
+                else:
+                    job_create = schemas.JobCreate(
+                        title=title,
+                        company=company,
+                        location=location,
+                        url=url,
+                        description=description,
+                        posted_date=posted_date,
+                        source=source,
+                        tags=tags,
+                        is_remote=is_remote
+                    )
+                    crud.jobs.create_job(db, job_create)
+                    print(f"Saved new job to DB: {title}")
         if persist:
             db.close()
 
