@@ -40,6 +40,10 @@ def get_job_by_id(db: Session, job_id: int):
     return db.query(models.Job).filter(models.Job.id == job_id).first()
 
 
+def get_job_by_url(db: Session, job_url: str):
+    return db.query(models.Job).filter(models.Job.url == job_url).first()
+
+
 def create_job(db: Session, job: schemas.JobCreate):
     db_job = models.Job(**job.dict())
     db.add(db_job)
